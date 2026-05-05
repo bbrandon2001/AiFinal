@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
-
-
 get_ipython().system('pip install opencv-python numpy')
 
 #python apple_quality_checker.py --image path/to/apple.jpg
@@ -16,9 +13,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-
-
-# In[13]:
+from typing import Tuple, List, Dict
 
 
 # ─────────────────────────── Quality Thresholds ───────────────────────────
@@ -30,12 +25,10 @@ THRESHOLDS = {
 }
 
 
-# In[11]:
-
 
 # ─────────────────────────── Core Detection ───────────────────────────────
 
-def segment_apple(image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def segment_apple(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """
     Segment the apple from the background.
     Returns (mask, largest_contour).
@@ -109,7 +102,7 @@ def analyze_color(image: np.ndarray, mask: np.ndarray) -> float:
     return float(np.clip(score, 0, 1))
 
 
-def detect_defects(image: np.ndarray, mask: np.ndarray) -> tuple[float, np.ndarray]:
+def detect_defects(image: np.ndarray, mask: np.ndarray) -> Tuple[float, np.ndarray]:
     """
     Detect bruises, dark spots, and blemishes on the apple surface.
     Returns (defect_ratio, defect_mask).
@@ -144,7 +137,7 @@ def detect_defects(image: np.ndarray, mask: np.ndarray) -> tuple[float, np.ndarr
 
 def compute_quality_score(roundness: float,
                            color_score: float,
-                           defect_ratio: float) -> tuple[float, str, tuple]:
+                           defect_ratio: float) -> Tuple[float, str, tuple]:
     """
     Combine individual metrics into an overall quality score 0–100
     and a grade label.
@@ -166,9 +159,6 @@ def compute_quality_score(roundness: float,
         grade, color = "REJECTED ❌  Defective",  (0, 50, 220)
 
     return overall, grade, color
-
-
-# In[4]:
 
 
 # ─────────────────────────── Visualisation ────────────────────────────────
